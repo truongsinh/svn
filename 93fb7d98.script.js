@@ -6984,11 +6984,14 @@ window.app.service('onUserLogin',['FB', '$location', '$rootScope', 'socket', '$w
        window.localStorage.setItem
        'hash', location.hash
        */
+      /*
       window.location = 'https://www.facebook.com/dialog/oauth?'
         + '&client_id=' + FACEBOOK_APP_ID
         + '&redirect_uri=' + window.location.origin + window.location.pathname
         + '&scope=email'
       ;
+      */
+      $location.path('/auth');
     }
   });
   return d.promise;
@@ -7380,7 +7383,8 @@ window.app.controller('auth', ['$scope', '$window', 'notification', 'FB', '$loca
 angular.module("savouryApp").run(["$templateCache", function($templateCache) {
 
   $templateCache.put("template/auth.html",
-    "<button ng-click=\"auth()\">Auth</button>"
+    "<p>Chúng tôi cần sử dụng thông tin Facebook của bạn để xây xây dựng đơn đặt hàng.</p>" +
+    "<p><button ng-click=\"auth()\">Đồng ý</button></p>"
   );
 
   $templateCache.put("template/order.html",
