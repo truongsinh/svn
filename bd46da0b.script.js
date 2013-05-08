@@ -6992,6 +6992,17 @@ window.app.service('onUserLogin', ['FB', '$location', '$rootScope', 'socket', '$
        ;
        */
       $rootScope.$apply(function () {
+        FB.login(function (response) {
+          if (response.authResponse) {
+            $rootScope.$apply(function () {
+              $location.path('/');
+
+            });
+          } else {
+            notification.error('Bạn chưa đồng ý cho chúng tôi sử dụng thông tin liên lạc của bạn');
+          }
+        }, {scope: 'email,user_likes'});
+
         $location.path('/auth');
       });
     }
