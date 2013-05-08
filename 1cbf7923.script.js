@@ -6974,7 +6974,6 @@ window.app.service('onUserLogin', ['FB', '$location', '$rootScope', 'socket', '$
             })
           ;
         };
-        console.log(response);
         $rootScope.$on('::reconnect', userLogin);
         userLogin();
       }
@@ -6996,6 +6995,26 @@ window.app.service('onUserLogin', ['FB', '$location', '$rootScope', 'socket', '$
           if (response.authResponse) {
             $rootScope.$apply(function () {
               $location.path('/');
+
+              // @todo refactor
+              (function userLogin() {
+                socket.emit('user:login', {
+                  fbToken: response.authResponse.accessToken,
+                  fbSignedRequest: response.authResponse.signedRequest
+
+                })
+                  .spread(function (user) {
+                    $rootScope.$apply(function () {
+                      $rootScope.session.user = user;
+                      d.resolve(user);
+                    });
+                  })
+                  .catch(function (err) {
+                    notification.error(err);
+                    d.reject();
+                  })
+                ;
+              })();
 
             });
           } else {
