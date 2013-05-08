@@ -6937,7 +6937,7 @@ window.app = angular.module('savouryApp', ['ngCookies'])
 
 'use strict';
 
-window.app.service('onUserLogin',['FB', '$location', '$rootScope', 'socket', '$window', 'FACEBOOK_APP_ID', 'notification', 'Q', function (FB, $location, $rootScope, socket, window, FACEBOOK_APP_ID, notification, Q) {
+window.app.service('onUserLogin', ['FB', '$location', '$rootScope', 'socket', '$window', 'FACEBOOK_APP_ID', 'notification', 'Q', function (FB, $location, $rootScope, socket, window, FACEBOOK_APP_ID, notification, Q) {
 
   var d = Q.defer();
 
@@ -6985,13 +6985,15 @@ window.app.service('onUserLogin',['FB', '$location', '$rootScope', 'socket', '$w
        'hash', location.hash
        */
       /*
-      window.location = 'https://www.facebook.com/dialog/oauth?'
-        + '&client_id=' + FACEBOOK_APP_ID
-        + '&redirect_uri=' + window.location.origin + window.location.pathname
-        + '&scope=email'
-      ;
-      */
-      $location.path('/auth');
+       window.location = 'https://www.facebook.com/dialog/oauth?'
+       + '&client_id=' + FACEBOOK_APP_ID
+       + '&redirect_uri=' + window.location.origin + window.location.pathname
+       + '&scope=email'
+       ;
+       */
+      $rootScope.$apply(function () {
+        $location.path('/auth');
+      });
     }
   });
   return d.promise;
