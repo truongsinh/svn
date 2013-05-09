@@ -7148,6 +7148,7 @@ app.factory('FB', ['$window', 'FACEBOOK_APP_ID', function (window, FACEBOOK_APP_
   };
   FB = {
     appId: FACEBOOK_APP_ID,
+    Canvas: {},
     Event: {}
   };
 
