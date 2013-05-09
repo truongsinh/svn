@@ -6931,8 +6931,13 @@ window.app = angular.module('savouryApp', ['ngCookies'])
         redirectTo: '/order'
       });
   })
-  .value('SOCKET_ENDPOINT', 'http://savoury.eu01.aws.af.cm:80' || 'http://localhost:5000')
+  //*
+  .value('SOCKET_ENDPOINT', 'http://savoury.eu01.aws.af.cm:80')
   .value('FACEBOOK_APP_ID', '435563386538112')
+  /*
+  .value('SOCKET_ENDPOINT', 'http://localhost:5000')
+  .value('FACEBOOK_APP_ID', '465110266900032')
+  //*/
 ;
 
 'use strict';
@@ -7384,6 +7389,7 @@ window.app.controller('order', ['$scope', '$window', 'notification', 'socket', '
               + '\nAcc Name: TO HOANG ANH'
               + '\nAmount: ' + data.total + ' EUR'
               + '\nRef No: ' + data.referenceNumber
+              + '\nEmail xác nhận với nội dung tương tự cũng sẽ được gởi trong vòng ít phút đến: ' + data.email
               + '\nXin cảm ơn quý khách.'
             ;
           notification.info(m);
