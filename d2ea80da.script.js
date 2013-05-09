@@ -7137,11 +7137,13 @@ app.factory('socket', [ '$rootScope', '$cookies', 'SOCKET_ENDPOINT', 'Q', functi
 'use strict';
 
 app.factory('FB', ['$window', 'FACEBOOK_APP_ID', function (window, FACEBOOK_APP_ID) {
-  var FB, fbCore, fbEvent, queue;
+  var FB, fbCore, fbEvent, fbCanvas, queue;
   fbCore = ['api', 'ui', 'getLoginStatus', 'login', 'logout'];
   fbEvent = ['subscribe', 'unsubscribe'];
+  fbCanvas = ['setSize'];
   queue = {
     core: [],
+    canvas: [],
     event: []
   };
   FB = {
@@ -7153,7 +7155,7 @@ app.factory('FB', ['$window', 'FACEBOOK_APP_ID', function (window, FACEBOOK_APP_
     FB[api] = function () {
       queue.core.push({
         method: api,
-        'arguments': arguments
+        'args': arguments
       });
     };
   });
@@ -7162,7 +7164,16 @@ app.factory('FB', ['$window', 'FACEBOOK_APP_ID', function (window, FACEBOOK_APP_
     FB.Event[api] = function () {
       queue.event.push({
         method: api,
-        'arguments': arguments
+        'args': arguments
+      });
+    };
+  });
+
+  fbCanvas.forEach(function (api) {
+    FB.Canvas[api] = function () {
+      queue.canvas.push({
+        method: api,
+        'args': arguments
       });
     };
   });
@@ -7179,7 +7190,7 @@ app.factory('FB', ['$window', 'FACEBOOK_APP_ID', function (window, FACEBOOK_APP_
     });
 
     queue.event.forEach(function (command) {
-      nativeFB.Event[command.method].apply(nativeFB, command.arguments);
+      nativeFB.Event[command.method].apply(nativeFB, command.args);
     });
 
     fbCore.forEach(function (api) {
@@ -7190,8 +7201,16 @@ app.factory('FB', ['$window', 'FACEBOOK_APP_ID', function (window, FACEBOOK_APP_
       FB.Event[api] = nativeFB.Event[api];
     });
 
+    fbCanvas.forEach(function (api) {
+      FB.Canvas[api] = nativeFB.Canvas[api];
+    });
+
+    queue.canvas.forEach(function (command) {
+      nativeFB.Canvas[command.method].apply(nativeFB, command.args);
+    });
+
     queue.core.forEach(function (command) {
-      nativeFB[command.method].apply(nativeFB, command.arguments);
+      nativeFB[command.method].apply(nativeFB, command.args);
     });
   };
   return FB;
